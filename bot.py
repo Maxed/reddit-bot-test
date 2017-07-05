@@ -8,6 +8,7 @@ import config
 
 subreddit = "test"
 
+comment_cache = []
 
 # login function
 def login():
@@ -26,19 +27,24 @@ def login():
 	return r
 
 # main function
-def run(r, comments_replied_to):
+def run(r, comment_cache):
 	# check for comments in specified subreddits
-	for comment in r.subreddit('test').comments(limit = 25):
+	for comment in r.subreddit('test').comments(limit = 50):
 		# if a certain string is in the comments then reply and log it
-		if "hello" in comment.body and comment.id not in comments_replied_to and comment.author != r.user.me():
+		if "hello" in comment.body and comment.id not in comment_cache and comment.author != r.user.me():
 			print("string matched in " + comment.id)
+
 			comment.reply("Thank You!")
+			print("replied to " + comment.id)
 
-			with open()
+			comment_cache.append(comment.id)
+			if comment.id in comment_cache:
+				print("added " + comment.id + " to comment cache")
 
-			# comments.append(comment.id)
-
-
+	print("sleeping...")
+	time.sleep(10)
+	
 r = login()
 
-run(r, comments_replied_to);
+while True:
+	run(r, comment_cache)
