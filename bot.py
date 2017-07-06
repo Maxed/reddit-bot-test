@@ -8,7 +8,7 @@ import config
 
 subreddit = "test"
 
-comment_cache = []
+i = 0
 
 # login function
 def login():
@@ -27,24 +27,32 @@ def login():
 	return r
 
 # main function
-def run(r, comment_cache):
+def run(r):
 	# check for comments in specified subreddits
-	for comment in r.subreddit('test').comments(limit = 50):
+	for comment in r.subreddit("test").comments(limit = 1000):
 		# if a certain string is in the comments then reply and log it
-		if "hello" in comment.body and comment.id not in comment_cache and comment.author != r.user.me():
+		if "hello" in comment.body and comment.id not in open("comments.txt", "r").read() and comment.author != r.user.me():
 			print("string matched in " + comment.id)
 
 			comment.reply("Thank You!")
 			print("replied to " + comment.id)
 
-			comment_cache.append(comment.id)
-			if comment.id in comment_cache:
-				print("added " + comment.id + " to comment cache")
+			c = open("comments.txt", "a")
+			c.write(comment.id + "\n")
+			c.close()
+
+			print("added " + comment.id + " to comments.txt")
+		#else:
+			#print("nope")
+
+
 
 	print("sleeping...")
 	time.sleep(10)
 	
 r = login()
 
-while True:
-	run(r, comment_cache)
+while i < 2:
+	print("bot.py has ran: " + str(i))
+	i += 1
+	run(r)
