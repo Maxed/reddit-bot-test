@@ -1,3 +1,4 @@
 config.py
+comments.txt
 *.pyc
 **/__pycache__
